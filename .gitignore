@@ -14,3 +14,4 @@ wheels/
 credentials.json
 token.json
 node_modules/
+dashboard/dist/

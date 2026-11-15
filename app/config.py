@@ -1,18 +1,19 @@
-﻿from pydantic_settings import BaseSettings, SettingsConfigDict
+﻿from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
-    GOOGLE_API_KEY: str = ""
-    CLASSIFIER_MODEL: str = "google:gemini-3.5-flash-lite"
-    AGENT_MODEL: str = "google:gemini-3.8-flash"
-    GOOGLE_CLIENT_ID: str = ""
-    GOOGLE_CLIENT_SECRET: str = ""
-    GOOGLE_REFRESH_TOKEN: str = ""
-    DATABASE_URL: str = ""
-    POLLER_INTERVAL_SECONDS: int = 30
-    DASHBOARD_PASSWORD: str = "changeme"
+    google_client_id: str = ""
+    google_client_secret: str = ""
+    google_refresh_token: str = ""
+    database_url: str = ""
+    classifier_model: str = "google:gemini-3.5-flash-lite"
+    agent_model: str = "google:gemini-3.8-flash"
+    poll_interval_seconds: int = 60
+    dashboard_username: str = "admin"
+    dashboard_password: str = ""
 
 
 settings = Settings()

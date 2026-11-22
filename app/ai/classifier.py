@@ -29,7 +29,11 @@ say that a colleague replies within one business day, and sign off with "Rex and
 Never mention AI.
 """
 
-classifier = Agent(settings.classifier_model, output_type=Classification, instructions=INSTRUCTIONS)
+classifier = Agent(
+  model=settings.classifier_model, 
+  output_type=Classification, 
+  instructions=INSTRUCTIONS
+)
 
 
 def classify(thread: str) -> Classification:

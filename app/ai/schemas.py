@@ -35,7 +35,8 @@ class AgentReply(BaseModel):
     reasoning: str = Field(description="Which knowledge base entries you used, and why")
     enough_information: bool = Field(description="True when the knowledge base answers the question")
     promises_an_action: bool = Field(
-        description="True when the reply promises a refund, shipment, replacement, date, or call"
+        description="True when the reply promises or offers this customer a refund, shipment, replacement, "
+        "date, or call, however it is worded (for example 'we can send', 'we will replace')"
     )
     issue: Issue | None = Field(
         default=None, description="Fill in when the customer reports a problem with a product"

@@ -13,5 +13,6 @@ wheels/
 .env
 credentials.json
 token.json
+evals/.last_run.json
 node_modules/
 dashboard/dist/

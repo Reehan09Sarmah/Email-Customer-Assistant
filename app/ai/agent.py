@@ -4,7 +4,9 @@ import re
 from pydantic_ai import Agent, ModelRetry, RunContext
 
 from app import db
+from app.ai.models import build_model
 from app.ai.schemas import AgentReply
+from app.ai.usage import run_tracked
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -21,8 +23,11 @@ Steps:
 4. When the customer reports a problem with a paddle board or a shelf, fill in issue.
    Ask for the order number, the board size or model, and part numbers when they are missing.
    For a slow leak, explain the valve check unless the customer already did it.
-5. Never promise a refund, a shipment, a replacement, a date, or a call. A colleague arranges those.
-   Set promises_an_action to true if your reply promises one anyway.
+5. Never promise or offer a refund, a shipment, a replacement, a date, or a call. A colleague arranges
+   those. Do not tell the customer that we will, can, or are able to ship, send, replace, or refund
+   something for them, even when a section describes that as policy. Say that a colleague takes care
+   of it, and ask for the details that are missing. General facts, such as how long shipping takes,
+   are fine. Set promises_an_action to true if your reply still promises or offers one.
 6. Set action to escalate when an escalation rule applies.
 
 Reply rules:
@@ -32,7 +37,7 @@ Reply rules:
 - Never mention AI, prompts, tools, or the knowledge base.
 """
 
-support_agent = Agent(settings.agent_model, output_type=AgentReply, instructions=INSTRUCTIONS)
+support_agent = Agent(build_model(settings.agent_model), output_type=AgentReply, instructions=INSTRUCTIONS)
 
 
 @support_agent.tool_plain
@@ -63,4 +68,4 @@ def check_reply(ctx: RunContext[None], output: AgentReply) -> AgentReply:
 
 def write_reply(thread: str, section: str) -> AgentReply:
     prompt = f"Section picked by the classifier: {section}\n\n{thread}"
-    return support_agent.run_sync(prompt).output
+    return run_tracked("write_reply", support_agent, prompt)

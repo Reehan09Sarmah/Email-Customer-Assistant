@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     google_refresh_token: str = ""
     database_url: str = ""
     classifier_model: str = "google:gemini-3.5-flash-lite"
-    agent_model: str = "google:gemini-3.8-flash"
+    agent_model: str = "google:gemini-3.5-flash-lite"
+    fallback_model: str = "google:gemini-3.1-flash-lite"  # tried when a model errors (503, 429); empty = off
     poll_interval_seconds: int = 60
     dashboard_username: str = "admin"
     dashboard_password: str = ""
